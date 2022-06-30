@@ -15,7 +15,7 @@ using namespace PiBench;
 int main(int argc, char **argv) {
   // Parse command line arguments
   options_t opt;
-  tree_options_t tree_opt;
+  hashtable_options_t hashtable_opt;
   try {
     cxxopts::Options options("PiBench",
                              "Benchmark framework for persistent indexes.");
@@ -167,11 +167,11 @@ int main(int argc, char **argv) {
 
     // Parse "pool_path"
     if (result.count("pool_path"))
-      tree_opt.pool_path = result["pool_path"].as<std::string>();
+      hashtable_opt.pool_path = result["pool_path"].as<std::string>();
 
     // Parse "pool_size"
     if (result.count("pool_size"))
-      tree_opt.pool_size = result["pool_size"].as<uint64_t>();
+      hashtable_opt.pool_size = result["pool_size"].as<uint64_t>();
   } catch (const cxxopts::OptionException &e) {
     std::cout << "Error parsing options: " << e.what() << std::endl;
     exit(1);
@@ -241,20 +241,20 @@ int main(int argc, char **argv) {
   print_environment();
   std::cout << opt << std::endl;
 
-  tree_opt.key_size = opt.key_prefix.size() + opt.key_size;
-  tree_opt.value_size = opt.value_size;
-  tree_opt.num_threads = opt.num_threads;
+  hashtable_opt.key_size = opt.key_prefix.size() + opt.key_size;
+  hashtable_opt.value_size = opt.value_size;
+  hashtable_opt.num_threads = opt.num_threads;
 
   library_loader_t lib(opt.library_file);
   std::cerr << "Initializing..." << std::endl;
-  hash_api *tree = lib.create_tree(tree_opt, opt.hash_size, opt.num_threads);
-  if (tree == nullptr) {
-    std::cout << "Error instantiating tree." << std::endl;
+  hash_api *hashtable = lib.create_hashtable(hashtable_opt, opt.hash_size, opt.num_threads);
+  if (hashtable == nullptr) {
+    std::cout << "Error instantiating hashtable." << std::endl;
     exit(1);
   }
   // std::cerr << "Successful! " << std::endl;
   // sleep(10);
-  benchmark_t bench(tree, opt);
+  benchmark_t bench(hashtable, opt);
   bench.load();
   bench.run();
   return 0;

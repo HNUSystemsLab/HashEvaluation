@@ -171,7 +171,7 @@ class benchmark_t {
   /// Array to store keys and values.
   pair* kvs;
   /// Tree data structure being benchmarked.
-  hash_api* tree_;
+  hash_api* hashtable_;
 
   /// Options used to run this benchmark.
   const options_t opt_;

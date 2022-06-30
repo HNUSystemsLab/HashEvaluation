@@ -10,7 +10,7 @@
 #include "persist.h"
 
 extern size_t perfCounter;
-extern "C" hash_api *create_tree(const tree_options_t &opt, unsigned sz,
+extern "C" hash_api *create_hashtable(const hashtable_options_t &opt, unsigned sz,
                                  unsigned tnum) {
   if (sz)
     sz = sz / Segment::kNumSlot;

@@ -1,16 +1,16 @@
 /**
- * Tree implementations must follow the API defined in this file, which consists
+ * Hashtable implementations must follow the API defined in this file, which consists
  * of two main parts:
- *     1. create_tree(...) function that is responsible for instantiating the
- * tree. The function will be called with an instance of tree_options_t passed
+ *     1. create_hashtable(...) function that is responsible for instantiating the
+ *        hashtable. The function will be called with an instance of hashtable_options_t passed
  *        as parameter. This object constains information that can be used for
- *        instantiating specialized instances of the tree (e.g. inlinining small
+ *        instantiating specialized instances of the hashtable (e.g. inlinining small
  *        keys and values). This function must return a pointer to a class that
  *        inherits from hash_api (see below).
- *     2. hash_api class covers the main methods to be called on the tree by the
+ *     2. hash_api class covers the main methods to be called on the hashtable by the
  *        benchmark framework. Keys and values are passed in a generalized way
  *        using a C-like syntax to enable an easier integration of a wider
- *        variety of tree implementations.
+ *        variety of hashtable implementations.
  */
 #ifndef __hash_api_HPP__
 #define __hash_api_HPP__
@@ -19,7 +19,7 @@
 #include <iostream>
 #include <string>
 
-struct tree_options_t {
+struct hashtable_options_t {
   size_t key_size = 8;
   size_t value_size = 8;
   std::string pool_path = "";
@@ -31,7 +31,7 @@ struct hash_Utilization {
   float utilization;
 };
 class hash_api;
-extern "C" hash_api *create_tree(const tree_options_t &opt, unsigned sz,
+extern "C" hash_api *create_hashtable(const hashtable_options_t &opt, unsigned sz,
                                  unsigned tnum);
 
 class hash_api {

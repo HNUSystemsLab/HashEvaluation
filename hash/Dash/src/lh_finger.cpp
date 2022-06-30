@@ -2,7 +2,7 @@
 static const char* pool_name = PMEM_LOC "/pmem_hash.data";
 // pool size
 static const size_t pool_size = 64UL * 1024 * 1024 * 1024;
-extern "C" hash_api* create_tree(const tree_options_t& opt, unsigned sz = 0) {
+extern "C" hash_api* create_hashtable(const hashtable_options_t& opt, unsigned sz = 0) {
   // Step 1: create (if not exist) and open the pool
   bool file_exist = false;
   if (FileExists(pool_name)) file_exist = true;

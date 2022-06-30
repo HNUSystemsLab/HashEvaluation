@@ -17,10 +17,10 @@ namespace PiBench
       exit(1);
     }
 
-    // Search function 'create_tree'
+    // Search function 'create_hashtable'
     dlerror();
-    create_fn_ = (hash_api * (*)(const tree_options_t &, unsigned, unsigned))
-        dlsym(handle_, "create_tree");
+    create_fn_ = (hash_api * (*)(const hashtable_options_t &, unsigned, unsigned))
+        dlsym(handle_, "create_hashtable");
     auto err = dlerror();
     if (err != nullptr)
     {
@@ -43,7 +43,7 @@ namespace PiBench
     }
   }
 
-  hash_api *library_loader_t::create_tree(const tree_options_t &opt,
+  hash_api *library_loader_t::create_hashtable(const hashtable_options_t &opt,
                                           unsigned sz = 0, unsigned tnum = 1)
   {
     return create_fn_(opt, sz, tnum);

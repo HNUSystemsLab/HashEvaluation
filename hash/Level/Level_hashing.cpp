@@ -26,7 +26,7 @@ void LevelHashing::generate_seeds(void)
     s_seed = s_seed << (rand() % 63);
   } while (f_seed == s_seed);
 }
-extern "C" hash_api *create_tree(const tree_options_t &opt, unsigned sz, unsigned tnum)
+extern "C" hash_api *create_hashtable(const hashtable_options_t &opt, unsigned sz, unsigned tnum)
 {
   if (sz)
     sz = log2(2 * sz / 3 / ASSOC_NUM);

@@ -71,8 +71,8 @@ void print_environment() {
             << "\tKernel: " << kernel_version << std::endl;
 }
 
-benchmark_t::benchmark_t(hash_api *tree, const options_t &opt) noexcept
-    : tree_(tree),
+benchmark_t::benchmark_t(hash_api *hashtable, const options_t &opt) noexcept
+    : hashtable_(hashtable),
       opt_(opt),
       op_generator_(opt.read_ratio, opt.insert_ratio, opt.remove_ratio),
       value_generator_(opt.value_size),
@@ -138,15 +138,15 @@ void benchmark_t::load() noexcept {
   {
     auto tid = omp_get_thread_num();
     uint64_t counter = 0;
-    tree_->thread_ini(tid);
+    hashtable_->thread_ini(tid);
 #pragma omp for schedule(static)
     for (uint64_t i = 0; i < opt_.num_ops; ++i) {
       if (!opt_.skip_load) {
         if (i < negative_size) {
-          tree_->insert(kvs1[i].key, opt_.key_size, kvs1[i].value,
+          hashtable_->insert(kvs1[i].key, opt_.key_size, kvs1[i].value,
                         opt_.value_size, tid, counter);
         } else {
-          tree_->insert(kvs[i].key, opt_.key_size, kvs[i].value,
+          hashtable_->insert(kvs[i].key, opt_.key_size, kvs[i].value,
                         opt_.value_size, tid, counter);
         }
       }
@@ -201,20 +201,20 @@ void benchmark_t::run() noexcept {
       }
       switch (op) {
         case operation_t::READ: {
-          tree_->find(key_ptr, opt_.key_size, value_out, tid);
+          hashtable_->find(key_ptr, opt_.key_size, value_out, tid);
           break;
         }
 
         case operation_t::INSERT: {
           ////for insert
           if (!opt_.resize_ratio) {
-            tree_->insert(key_ptr, opt_.key_size, value_ptr, opt_.value_size,
+            hashtable_->insert(key_ptr, opt_.key_size, value_ptr, opt_.value_size,
                           tid, counter++);
           }
           //// for resizing
           else if (opt_.resize_ratio) {
             sw.start();
-            auto r = tree_->insertResize(key_ptr, opt_.key_size, value_ptr,
+            auto r = hashtable_->insertResize(key_ptr, opt_.key_size, value_ptr,
                                          opt_.value_size, tid, counter++);
 
             auto ela = sw.elapsed<std::chrono::nanoseconds>();
@@ -224,7 +224,7 @@ void benchmark_t::run() noexcept {
 
           // // for load_factor
           if (opt_.load_factor && i % load_factor_stride == 0) {
-            auto u = tree_->utilization();
+            auto u = hashtable_->utilization();
             cout << "Inserted: " << i / 1000000
                  << "M load factor: " << u.load_factor
                  << "  utilization: " << u.utilization << "\n";
@@ -233,7 +233,7 @@ void benchmark_t::run() noexcept {
           break;
         }
         case operation_t::REMOVE: {
-          auto r = tree_->remove(key_ptr, opt_.key_size, tid);
+          auto r = hashtable_->remove(key_ptr, opt_.key_size, tid);
           break;
         }
         default:

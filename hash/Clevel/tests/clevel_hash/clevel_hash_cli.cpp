@@ -98,7 +98,7 @@ public:
 		return scan_sz;
 	}
 };
-extern "C" hash_api *create_tree(const tree_options_t &opt, unsigned sz = 1024, unsigned tnum = 1)
+extern "C" hash_api *create_hashtable(const hashtable_options_t &opt, unsigned sz = 1024, unsigned tnum = 1)
 {
 	clevel *c = new clevel(tnum);
 	return c;

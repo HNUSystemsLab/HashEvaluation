@@ -29,19 +29,19 @@ namespace PiBench
     /**
    * @brief Create a tree object
    *
-   * Call create_tree function implemented by the library.
+   * Call create_hashtable function implemented by the library.
    *
    * @param tree_opt workload options useful for optimizing tree layout.
    * @return hash_api*
    */
-    hash_api *create_tree(const tree_options_t &tree_opt, unsigned sz, unsigned tnum);
+    hash_api *create_hashtable(const hashtable_options_t &tree_opt, unsigned sz, unsigned tnum);
 
   private:
     /// Handle for the dynamic library loaded.
     void *handle_;
 
     /// Pointer to factory function resposinble for instantiating a tree.
-    hash_api *(*create_fn_)(const tree_options_t &, unsigned, unsigned);
+    hash_api *(*create_fn_)(const hashtable_options_t &, unsigned, unsigned);
   };
 } // namespace PiBench
 #endif
